@@ -1,0 +1,8 @@
+{% extends 'layoutErrors.html.twig' %}
+{% block title %}Page Introuvable{{ parent() }}{% endblock %}
+{% block body %}
+    <div class="logo">
+        <h1><img src="{{ asset('img/Error/error.png') }}" height="142"/></h1>
+        <span><img src="{{ asset('img/Error/signal.png') }}"/>Oops! La page que vous demandez n'existe pas, veuillez reformuler votre demande en vérifiant bien quelle est correcte.</span>
+    </div>
+{% endblock %}

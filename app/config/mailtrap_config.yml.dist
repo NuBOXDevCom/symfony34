@@ -1,0 +1,6 @@
+parameters:
+    mailtrap_host: mailtrap.io
+    mailtrap_username: your_username
+    mailtrap_password: your_password
+    mailtrap_auth_mode: cram-md5
+    mailtrap_port: your_port

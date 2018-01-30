@@ -1,0 +1,52 @@
+{% extends 'layoutBase.html.twig' %}
+{% block title %}
+    Réglement de ma commande{{ parent() }}
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('css/CardJs/card-js.min.css') }}"/>
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Mon panier - Réglement par carte bancaire</h3>
+                </div>
+                <div class="box-body">
+                    <img src="{{ asset('img/cardsAccepted.png') }}" alt="Cartes acceptées" class="img-responsive center-block"/>
+                    <div class="panel">
+                        <form id="payment-form" action="{{ path('cart_process_payment_stripe') }}" method="post">
+                            <div class="card-js stripe" data-stripe="true"></div>
+                            <button class="btn">Régler {{ amount }}€</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script type="text/javascript" src="{{ asset('js/CardJs/card-js.min.js') }}"></script>
+    <script>
+      $(function () {
+        Stripe.setPublishableKey('{{ pubKey }}')
+        $('#payment-form').find('button').click(function () {
+          let form = $('#payment-form')
+          let submit = form.find('button')
+          let submitInitialText = submit.text()
+          submit.attr('disabled', 'disabled').text('Veuillez patienter, traitement en cours...')
+          Stripe.card.createToken(form, function (status, response) {
+            if (response.error) {
+              form.field('.stripe-errors').text(response.error.message).show()
+              submit.removeAttr('disabled')
+              submit.text(submitInitialText)
+            } else {
+              form.append($('<input type=\'hidden\' name=\'stripeToken\'>').val(response.id))
+              form.submit()
+            }
+          })
+        })
+      })
+    </script>
+{% endblock %}

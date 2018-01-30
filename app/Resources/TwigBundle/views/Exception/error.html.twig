@@ -1,0 +1,10 @@
+{% extends 'layoutErrors.html.twig' %}
+{% block title %}Erreur{{ parent() }}{% endblock %}
+{% block body %}
+    <div class="logo">
+        <h1><img src="{{ asset('img/Error/error.png') }}" height="142"/></h1>
+        <span><img src="{{ asset('img/Error/signal.png') }}"/>Oops! Une erreur s'est produite durant le chargement de la page<br>
+    Notre application a retourné une erreur {{ status_code }} : {{ status_text }}</span>
+    </div>
+    <div class="buttom"></div>
+{% endblock %}

@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="fr">
+<head>
+    <title>{% block title %}{% endblock %} - Website EntityCorp Console</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <script src="{{ asset('js/jquery-2.2.4.min.js') }}"></script>
+    <link href="{{ asset('css/Error/style.css') }}" rel="stylesheet" type="text/css" media="all"/>
+    <link href="{{ asset('favicon.ico') }}" type="image/x-icon" rel="icon"/>
+    <link href="{{ asset('favicon.ico') }}" type="image/x-icon" rel="shortcut icon"/>
+    <!--[if lt IE 9]>
+    <script src="{{ asset('js/html5shiv.min.js') }}"></script>
+    <script src="{{ asset('js/respond.min.js') }}"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="wrap">
+    <div class="content">
+        {% block body %}{% endblock %}
+    </div>
+</div>
+</body>
+</html>

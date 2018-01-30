@@ -1,0 +1,5 @@
+app/config/parameters.yml
+var/
+vendor/
+web/bundles/
+app/config/mailtrap_config.yml

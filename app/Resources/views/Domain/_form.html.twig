@@ -1,0 +1,40 @@
+<div class="box-body">
+    {{ form_start(form, { 'attr': {
+        'class': 'form-horizontal'
+    }}) }}
+    {{ form_errors(form) }}
+    <div class="form-group">
+        {{ form_label(form.name, 'Nom' ,{ 'label_attr': {
+            'class': 'col-sm-2 control-label'
+        } }) }}
+        <div class="col-sm-10">
+            {{ form_widget(form.name, { 'attr': {
+                'class': 'form-control',
+                'autofocus': true
+            }}) }}
+            <small>(ex: host.domain.net)</small>
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(form.user, 'Utilisateur' ,{ 'label_attr': {
+            'class': 'col-sm-2 control-label'
+        } }) }}
+        <div class="col-sm-10">
+            {{ form_widget(form.user, { 'attr': {
+                'class': 'form-control'
+            }}) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+                {{ form_widget(form.enabled) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box-footer">
+    <button type="submit" class="btn btn-info pull-right">{% if type == 'add' %}Ajouter{% else %}Sauvegarder{% endif %}</button>
+</div>
+{{ form_rest(form) }}
+{{ form_end(form) }}

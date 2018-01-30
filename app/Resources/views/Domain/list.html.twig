@@ -1,0 +1,86 @@
+{% extends 'layoutBase.html.twig' %}
+{% block title %}Mes Domaines{{ parent() }}{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Mes domaines</h3>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Statut</th>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <th>Utilisateur</th>
+                            {% endif %}
+                            <th>Action</th>
+                        </tr>
+                        {% for domain in domains %}
+                            <tr id="{{ domain.id }}">
+                                <td>{{ domain.name }}</td>
+                                <td>
+                                    {% if domain.enabled %}
+                                        <span class="label label-success text-sm"
+                                              id="active{{ domain.id }}">Actif</span>
+                                    {% else %}
+                                        <span class="label label-danger text-sm"
+                                              id="inactive{{ domain.id }}">Désactivé</span>
+                                    {% endif %}
+                                </td>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <td>{{ domain.user.username }}</td>
+                                {% endif %}
+                                <td>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <a href="{{ path('domains_edit', {'id': domain.id}) }}"
+                                           class="btn bg-blue-gradient btn-xs">Editer</a>
+                                        {% if domain.enabled %}
+                                            <button class="btn bg-red-gradient btn-xs disableDomain"
+                                                    id="{{ domain.id }}">Désactiver
+                                            </button>
+                                        {% else %}
+                                            <button class="btn bg-green-gradient btn-xs enableDomain"
+                                                    id="{{ domain.id }}">Activer
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+                                    <button class="btn bg-orange btn-xs deleteDomain"
+                                            id="{{ domain.id }}">Supprimer
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <span class="btn btn-sm bg-light-blue-gradient"><a href="{{ path('domains_add') }}"
+                                                               class="text-bold text-black">Ajouter un nouveau domaine</a></span>
+        </div>
+    </div>
+    <nav>
+        <ul class="pagination">
+            {% if pagination.page>1 %}
+                <li><a href="{{ path(pagination.route,
+                    pagination.route_params|merge({'page': 1})) }}"><<</a></li>
+                <li><a href="{{ path(pagination.route,
+                    pagination.route_params|merge({'page': pagination.page-1})) }}"><</a></li>
+            {% endif %}
+            {% for p in range(max(pagination.page-4, 1),
+            min(pagination.page+4, pagination.pages_count)) %}
+                {% if pagination.pages_count %}
+                    <li {% if p == pagination.page %} class="active"{% endif %}><a href="{{ path(pagination.route,
+                        pagination.route_params|merge({'page': p})) }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if pagination.page < pagination.pages_count %}
+                <li><a href="{{ path(pagination.route,
+                    pagination.route_params|merge({'page': pagination.page+1})) }}">></a></li>
+                <li><a href="{{ path(pagination.route,
+                    pagination.route_params|merge({'page': pagination.pages_count})) }}">>></a></li>
+            {% endif %}
+        </ul>
+        <p></p>
+    </nav>
+{% endblock %}

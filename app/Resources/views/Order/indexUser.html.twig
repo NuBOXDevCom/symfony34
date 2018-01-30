@@ -1,0 +1,44 @@
+{% extends 'layoutBase.html.twig' %}
+{% block title %}Mes commandes{{ parent() }}{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Mes commandes</h3>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Date</th>
+                            <th>Montant</th>
+                            <th>Plateforme</th>
+                            <th>Statut</th>
+                            <th>Facture</th>
+                            <th>Action</th>
+                        </tr>
+                        {% for order in pagination %}
+                            <tr id="{{ order.id }}">
+                                <td>{{ order.created|localizeddate('long', 'short', locale) }}</td>
+                                <td>{{ order.amount }} €</td>
+                                <td>{{ order.gateway }}</td>
+                                <td>
+                                    <span class="label label-success text-sm">{{ order.status }}</span>
+                                </td>
+                                <td>{{ order.invoiceNumber }}</td>
+                                <td>
+                                    <a href="{{ path('order_invoice', {id: order.id}) }}"
+                                       class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-cloud-download"></span> Télécharger en pdf
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock %}

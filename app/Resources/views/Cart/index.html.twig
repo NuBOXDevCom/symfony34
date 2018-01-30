@@ -1,0 +1,64 @@
+{% extends 'layoutBase.html.twig' %}
+{% block title %}Mon panier{{ parent() }}{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Mon panier</h3>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Référence</th>
+                            <th>Nom</th>
+                            <th>Prix</th>
+                            <th>Quantité</th>
+                            <th>Montant</th>
+                        </tr>
+                        {% set totalAmount = 0 %}
+                        {% if userCart is empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <span class="text-bold text-danger">Votre panier est vide</span></td>
+                            </tr>
+                        {% else %}
+                            {% for prod in userCart.products %}
+                                {% set totalProduct = prod.product.price * prod.quantity %}
+                                {% set totalAmount = totalAmount + totalProduct %}
+                                <tr>
+                                    <td>{{ prod.product.reference }}</td>
+                                    <td>{{ prod.product.name }}
+                                        <br/><span class="text-muted text-sm">Ref: {{ prod.product.reference }}</span>
+                                    </td>
+                                    <td>{{ prod.product.price|number_format(2, ',', ' ') }}€</td>
+                                    <td>{{ prod.quantity }}</td>
+                                    <td>{{ totalProduct|number_format(2, ',', ' ') }}€</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td></td>
+                                <td style="display: table-cell; vertical-align: middle">
+                                    <a href="{{ path('cart_checkout_stripe') }}"
+                                       class="btn btn-success">Valider mon paiement</a>
+                                </td>
+                                <td class="text-right text-bold">
+                                    Montant total :
+                                </td>
+                                <td class="text-blue">
+                                    {{ totalAmount|number_format('2', ',', ' ') }}€
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td><a href="{{ path('cart_destroy') }}">
+                                        <button class="btn btn-default">Vider mon panier</button>
+                                    </a></td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

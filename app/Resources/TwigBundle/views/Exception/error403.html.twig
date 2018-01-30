@@ -1,0 +1,9 @@
+{% extends 'layoutErrors.html.twig' %}
+{% block title %}Autorisation Refusée{{ parent() }}{% endblock %}
+{% block body %}
+    <div class="logo">
+        <h1><img src="{{ asset('img/Error/error.png') }}" height="142"/></h1>
+        <span><img src="{{ asset('img/Error/signal.png') }}"/>Oops! Vous n'avez pas l'autorisation d'accéder à cette ressource.</span>
+    </div>
+    <div class="buttom"></div>
+{% endblock %}

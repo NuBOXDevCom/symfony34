@@ -1,0 +1,43 @@
+{% extends 'layoutBase.html.twig' %}
+{% block title %}Nos services{{ parent() }}{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Nos services</h3>
+                </div>
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prix</th>
+                            <th>Référence</th>
+                            <th></th>
+                        </tr>
+                        {% for product in pagination %}
+                            <tr id="{{ product.id }}">
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.price }} €</td>
+                                <td>{{ product.reference }}</td>
+                                <td>
+                                    <a href="{{ path('cart_add', {'productId': product.id}) }}" class="btn bg-green-gradient btn-xs">Commander</a>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn bg-blue-gradient btn-xs">Editer</a>
+                                        <button class="btn bg-yellow-gradient btn-xs deleteProduct" id="{{ product.id }}">Supprimer</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <span class="btn btn-sm bg-light-blue-gradient"><a href="{{ path('product_add') }}" class="text-bold text-black">Ajouter un produit</a></span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock %}
