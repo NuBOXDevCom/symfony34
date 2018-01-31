@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
     /**
-     * @var int $id
+     * @var int|null $id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      * @ORM\Id()
@@ -21,37 +21,37 @@ class Product
     protected $id;
     
     /**
-     * @var string $name
+     * @var string|null $name
      * @ORM\Column(type="string", length=255)
      */
     protected $name;
     
     /**
-     * @var string $reference
+     * @var string|null $reference
      * @ORM\Column(type="string", length=255)
      */
     protected $reference;
     
     /**
-     * @var float $price
+     * @var float|null $price
      * @ORM\Column(type="decimal", scale=2)
      */
     protected $price;
     
     /**
      * Get id
-     * @return integer
+     * @return integer|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
     
     /**
      * Get name
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -69,9 +69,9 @@ class Product
     
     /**
      * Get reference
-     * @return string
+     * @return string|null
      */
-    public function getReference(): string
+    public function getReference(): ?string
     {
         return $this->reference;
     }
@@ -89,9 +89,9 @@ class Product
     
     /**
      * Get price
-     * @return string
+     * @return string|null
      */
-    public function getPrice(): string
+    public function getPrice(): ?string
     {
         return $this->price;
     }
