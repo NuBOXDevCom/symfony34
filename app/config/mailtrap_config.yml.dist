@@ -1,6 +1,6 @@
 parameters:
-    mailtrap_host: mailtrap.io
+    mailtrap_host: smtp.mailtrap.io
     mailtrap_username: null
     mailtrap_password: null
     mailtrap_auth_mode: cram-md5
-    mailtrap_port: null
+    mailtrap_port: 25
