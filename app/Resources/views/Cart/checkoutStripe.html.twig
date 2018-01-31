@@ -3,7 +3,7 @@
     Réglement de ma commande{{ parent() }}
 {% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="{{ asset('css/CardJs/card-js.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/stripe.css') }}">
 {% endblock %}
 {% block body %}
     <div class="row">
@@ -13,11 +13,17 @@
                     <h3 class="box-title">Mon panier - Réglement par carte bancaire</h3>
                 </div>
                 <div class="box-body">
-                    <img src="{{ asset('img/cardsAccepted.png') }}" alt="Cartes acceptées" class="img-responsive center-block"/>
                     <div class="panel">
-                        <form id="payment-form" action="{{ path('cart_process_payment_stripe') }}" method="post">
-                            <div class="card-js stripe" data-stripe="true"></div>
-                            <button class="btn">Régler {{ amount }}€</button>
+                        <form action="{{ path('cart_process_payment_stripe') }}" method="post" id="payment-form">
+                            <div class="form-row">
+                                <label for="card-element">
+                                    Paiement par carte bancaire ou carte de crédit
+                                </label>
+                                <div id="card-element"></div>
+                                <div id="card-errors" role="alert"></div>
+                            </div>
+                            <br>
+                            <button class="btn" role="button" type="submit">Régler ma commande de {{ amount }}€</button>
                         </form>
                     </div>
                 </div>
@@ -26,26 +32,51 @@
     </div>
 {% endblock %}
 {% block js %}
-    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-    <script type="text/javascript" src="{{ asset('js/CardJs/card-js.min.js') }}"></script>
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
     <script>
-      $(function () {
-        Stripe.setPublishableKey('{{ pubKey }}')
-        $('#payment-form').find('button').click(function () {
-          let form = $('#payment-form')
-          let submit = form.find('button')
-          let submitInitialText = submit.text()
-          submit.attr('disabled', 'disabled').text('Veuillez patienter, traitement en cours...')
-          Stripe.card.createToken(form, function (status, response) {
-            if (response.error) {
-              form.field('.stripe-errors').text(response.error.message).show()
-              submit.removeAttr('disabled')
-              submit.text(submitInitialText)
-            } else {
-              form.append($('<input type=\'hidden\' name=\'stripeToken\'>').val(response.id))
-              form.submit()
-            }
-          })
+      let stripe = Stripe('{{ pubKey }}')
+      let elements = stripe.elements()
+      let style = {
+        base: {
+          color: '#32325d',
+          lineHeight: '18px',
+          fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+          fontSmoothing: 'antialiased',
+          fontSize: '16px',
+          '::placeholder': {
+            color: '#aab7c4'
+          }
+        },
+        invalid: {
+          color: '#fa755a',
+          iconColor: '#fa755a'
+        }
+      }
+      let card = elements.create('card', {style: style})
+      card.mount('#card-element')
+      card.addEventListener('change', function (event) {
+        let displayError = document.getElementById('card-errors')
+        if (event.error) {
+          displayError.textContent = event.error.message
+        } else {
+          displayError.textContent = ''
+        }
+      })
+      let form = $('#payment-form')
+      let submit = form.find('button')
+      let submitInitialText = submit.text()
+      submit.click(function (e) {
+        e.preventDefault()
+        submit.attr('disabled', 'disabled').text('Paiement en cours, veuillez patienter...')
+        stripe.createToken(card).then(function (result) {
+          if (result.error) {
+            submit.text(submitInitialText)
+            let errorElement = document.getElementById('card-errors')
+            errorElement.textContent = result.error.message
+          } else {
+            form.append($('<input type=\'hidden\' name=\'stripeToken\'>').val(result.token.id))
+            form.submit()
+          }
         })
       })
     </script>

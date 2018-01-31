@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Order;
+use AppBundle\Entity\OrderInvoice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,11 +19,12 @@ class OrderController extends Controller
      * @return Response
      * @throws \LogicException
      * @Route("/orders", name="orders_index")
+     * @throws \UnexpectedValueException
      */
     public function indexUserAction(Request $request): Response
     {
         $em         = $this->getDoctrine()->getManager();
-        $orders     = $em->getRepository(Order::class)->findBy([
+        $orders     = $em->getRepository(OrderInvoice::class)->findBy([
             'user' => $this->getUser()
         ]);
         $paginator  = $this->get('knp_paginator');
@@ -45,7 +46,7 @@ class OrderController extends Controller
     public function invoiceAction(Request $request, int $id)
     {
         $em    = $this->getDoctrine()->getManager();
-        $order = $em->getRepository(Order::class)->find($id);
+        $order = $em->getRepository(OrderInvoice::class)->find($id);
         if ($order && $order->getUser()->getId() === $this->getUser()->getId()) {
             $html     = $this->renderView(':Order:invoice.html.twig', [
                 'order'  => $order,

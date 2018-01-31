@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Cart;
-use AppBundle\Entity\Order;
+use AppBundle\Entity\OrderInvoice;
 use AppBundle\Entity\Product;
 use Stripe\Charge;
 use Stripe\Customer;
@@ -143,23 +143,22 @@ class CartController extends Controller
             $user     = $this->getUser();
             $cart     = $session->get('cart');
             $customer = Customer::create([
-                'source'      => $token,
-                'description' => $user->getFirstName() . ' ' . $user->getLastName(),
-                'email'       => $user->getEmail()
+                'source' => $token,
+                'email'  => $user->getEmail()
             ]);
             $charge   = Charge::create([
-                'amount'   => $this->getTotalAmount(),
-                'currency' => 'eur',
-                'customer' => $customer
+                'amount'      => $this->getTotalAmount(),
+                'currency'    => 'eur',
+                'description' => 'Achat sur Website EntityCorp',
+                'customer'    => $customer->id
             ]);
             if ($charge->paid && $charge->status === 'succeeded') {
-                $this->addFlash('success', 'Paiement OK');
-                $session->remove('cart');
+                $this->addFlash('success', 'Paiement effectué avec succès, merci !');
                 $em    = $this->getDoctrine()->getManager();
-                $order = new Order();
+                $order = new OrderInvoice();
                 $order->setAmount($charge->amount / 100)
                       ->setGateway('stripe')
-                      ->setInvoiceNumber('invoice-54122365')
+                      ->setInvoiceNumber(time())
                       ->setPayerId($customer->id)
                       ->setPaymentId($charge->id)
                       ->setStatus($charge->status)
@@ -167,12 +166,12 @@ class CartController extends Controller
                       ->setProducts($cart->getProducts());
                 $em->persist($order);
                 $em->flush();
+                $session->remove('cart');
                 return $this->redirectToRoute('cart_index');
             }
             $this->addFlash('error',
                 'Error Code: ' . $charge->failure_code . '<br>Error Message: ' . $charge->failure_message);
             return $this->redirectToRoute('cart_checkout_stripe');
-            
         }
         return $this->redirectToRoute('cart_index');
     }

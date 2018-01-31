@@ -7,12 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Order
+ * Class OrderInvoice
  * @package AppBundle\Entity
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AppBundle\Repository\OrderRepository")
+ * @ORM\Entity()
  */
-class Order
+class OrderInvoice
 {
     /**
      * @var int $id
@@ -24,25 +24,25 @@ class Order
     
     /**
      * @var string $paymentId
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=120)
      */
     protected $paymentId;
     
     /**
      * @var float $amount
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     * @ORM\Column(type="float", scale=2)
      */
     protected $amount;
     
     /**
      * @var int $invoice
-     * @ORM\Column(type="bigint", nullable=true)
+     * @ORM\Column(type="bigint")
      */
     protected $invoiceNumber;
     
     /**
      * @var string $status
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=120)
      */
     protected $status;
     
@@ -60,13 +60,13 @@ class Order
     
     /**
      * @var string $payerId
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=50)
      */
     protected $payerId;
     
     /**
      * @var string $platform
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=50)
      */
     protected $gateway;
     
@@ -74,10 +74,10 @@ class Order
      * @var ArrayCollection $products
      * @ORM\Column(type="array")
      */
-    protected $products = [];
+    protected $products;
     
     /**
-     * Order constructor.
+     * OrderInvoice constructor.
      */
     public function __construct()
     {
@@ -106,9 +106,9 @@ class Order
     /**
      * Set paymentId
      * @param string $paymentId
-     * @return Order
+     * @return OrderInvoice
      */
-    public function setPaymentId(string $paymentId): Order
+    public function setPaymentId(string $paymentId): OrderInvoice
     {
         $this->paymentId = $paymentId;
         return $this;
@@ -116,19 +116,19 @@ class Order
     
     /**
      * Get amount
-     * @return string
+     * @return float
      */
-    public function getAmount(): string
+    public function getAmount(): float
     {
-        return $this->amount;
+        return (float)$this->amount;
     }
     
     /**
      * Set amount
      * @param float $amount
-     * @return Order
+     * @return OrderInvoice
      */
-    public function setAmount(float $amount): Order
+    public function setAmount(float $amount): OrderInvoice
     {
         $this->amount = $amount;
         return $this;
@@ -136,9 +136,9 @@ class Order
     
     /**
      * Get invoiceNumber
-     * @return string
+     * @return int
      */
-    public function getInvoiceNumber(): string
+    public function getInvoiceNumber(): int
     {
         return $this->invoiceNumber;
     }
@@ -146,9 +146,9 @@ class Order
     /**
      * Set invoiceNumber
      * @param int $invoiceNumber
-     * @return Order
+     * @return OrderInvoice
      */
-    public function setInvoiceNumber(int $invoiceNumber): Order
+    public function setInvoiceNumber(int $invoiceNumber): OrderInvoice
     {
         $this->invoiceNumber = $invoiceNumber;
         return $this;
@@ -166,9 +166,9 @@ class Order
     /**
      * Set status
      * @param string $status
-     * @return Order
+     * @return OrderInvoice
      */
-    public function setStatus(string $status): Order
+    public function setStatus(string $status): OrderInvoice
     {
         $this->status = $status;
         return $this;
@@ -186,9 +186,9 @@ class Order
     /**
      * Set created
      * @param DateTime $created
-     * @return Order
+     * @return OrderInvoice
      */
-    public function setCreated(DateTime $created): Order
+    public function setCreated(DateTime $created): OrderInvoice
     {
         $this->created = $created;
         return $this;
@@ -206,9 +206,9 @@ class Order
     /**
      * Set payerId
      * @param string $payerId
-     * @return Order
+     * @return OrderInvoice
      */
-    public function setPayerId(string $payerId): Order
+    public function setPayerId(string $payerId): OrderInvoice
     {
         $this->payerId = $payerId;
         return $this;
@@ -226,9 +226,9 @@ class Order
     /**
      * Set gateway
      * @param string $gateway
-     * @return Order
+     * @return OrderInvoice
      */
-    public function setGateway($gateway): Order
+    public function setGateway(string $gateway): OrderInvoice
     {
         $this->gateway = $gateway;
         return $this;
@@ -246,9 +246,9 @@ class Order
     /**
      * Set user
      * @param User $user
-     * @return Order
+     * @return OrderInvoice
      */
-    public function setUser(User $user): Order
+    public function setUser(User $user): OrderInvoice
     {
         $this->user = $user;
         return $this;
@@ -266,9 +266,9 @@ class Order
     /**
      * Set products
      * @param ArrayCollection $products
-     * @return Order
+     * @return OrderInvoice
      */
-    public function setProducts(ArrayCollection $products): Order
+    public function setProducts(ArrayCollection $products): OrderInvoice
     {
         $this->products = serialize($products);
         return $this;
