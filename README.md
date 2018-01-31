@@ -6,6 +6,13 @@
 - Administrateur => admin / admin
 - Utilisateur => user / user
 
+> Paiements de test avec Stripe
+Fournir les informations ci-dessous pour tester les paiements:
+- Numéro de carte: 4242 4242 4242 4242
+- Exp: 12/19
+- CCV: 123
+- Code Postal: 75000
+
 # Installation
 > Cloner le repo
 ```bash
