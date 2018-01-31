@@ -3,3 +3,4 @@ var/
 vendor/
 web/bundles/
 app/config/mailtrap_config.yml
+app/config/stripe_config.yml

@@ -74,10 +74,20 @@
         "symfony-web-dir": "web",
         "symfony-tests-dir": "tests",
         "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml",
-            "file": "app/config/mailtrap_config.yml"
-        },
+        "incenteev-parameters": [
+            {
+                "file": "app/config/parameters.yml",
+                "dist-file": "app/config/parameters.yml.dist"
+            },
+            {
+                "file": "app/config/mailtrap_config.yml",
+                "dist-file": "app/config/mailtrap_config.yml.dist"
+            },
+            {
+                "file": "app/config/stripe_config.yml",
+                "dist-file": "app/config/stripe_config.yml.dist"
+            }
+        ],
         "branch-alias": {}
     }
 }
